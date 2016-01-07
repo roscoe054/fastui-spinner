@@ -23,8 +23,7 @@ var Spinner = React.createClass({
         opearte.call(this, -1)
     },
     render: function () {
-        var props = this.props,
-            value = this.state.value = this.props.value ? this.props.value : this.state.value
+        var props = this.props
 
         return (
             <View style={styles.container}>
@@ -34,8 +33,8 @@ var Spinner = React.createClass({
                     activeOpacity={props.disabled ? 1 : 0.5}>
                     <Text style={[styles.btnText, props.disabled ? styles.btnTextDisabled : {}]}>-</Text>
                 </TouchableOpacity>
-                <Text style={styles.content}>
-                {value}
+                <Text style={[styles.content, props.disabled ? styles.disabled : null]}>
+                    {this.state.value}
                 </Text>
                 <TouchableOpacity
                     style={[styles.btn, styles.btnAdd]}
@@ -45,6 +44,9 @@ var Spinner = React.createClass({
                 </TouchableOpacity>
             </View>
         )
+    },
+    getValue: function(){
+        return this.state.value
     }
 })
 
@@ -63,6 +65,7 @@ function opearte(direction) {
             // trigger onChange
             this.props.onChange ? this.props.onChange(result) : null
 
+            console.log(result);
             return {value: result}
         }
     })
@@ -72,17 +75,18 @@ var styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 50,
-        paddingTop: 8,
-        paddingBottom: 8,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
+        height: 44,
+        paddingTop: 6,
+        paddingBottom: 6,
+        borderWidth: 1,
+        borderColor: '#ccc',
         borderRadius: 4,
         backgroundColor: '#fff',
     },
     content: {
         flex: 1,
-        color: "#00afc7",
+        fontSize: 17,
+        color: "#333",
         textAlign: 'center',
     },
     btn: {
@@ -103,6 +107,9 @@ var styles = StyleSheet.create({
     },
     btnSub: {
         borderRightWidth: 1,
+    },
+    disabled: {
+        color: '#aaa'
     },
 })
 
