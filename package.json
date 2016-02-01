@@ -1,6 +1,6 @@
 {
   "name": "fastui-spinner",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "基于React Native的数字选择器",
   "main": "index.js",
   "scripts": {

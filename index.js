@@ -1,77 +1,70 @@
 'use strict'
 
-var React = require('react-native')
+import React, {Component, StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 
-var {StyleSheet, Text, View, TouchableOpacity,} = React
+class Spinner extends Component {
+    constructor(props) {
+        super(props)
 
-var Spinner = React.createClass({
-    getInitialState: function () {
-        return {
+        this.state = {
             value: this.props.value ? this.props.value : 0,
             activeOpacity: 1,
         }
-    },
-    getDefaultProps: function () {
-        return {
-            step: 1,
-        }
-    },
-    add: function () {
-        opearte.call(this, 1)
-    },
-    sub: function () {
-        opearte.call(this, -1)
-    },
-    render: function () {
-        var props = this.props
+    }
+    render() {
+        const {disabled} = this.props
 
         return (
             <View style={styles.container}>
                 <TouchableOpacity
                     style={[styles.btn, styles.btnSub]}
-                    onPress={this.sub}
-                    activeOpacity={props.disabled ? 1 : 0.5}>
-                    <Text style={[styles.btnText, props.disabled ? styles.btnTextDisabled : {}]}>-</Text>
+                    onPress={this.sub.bind(this)}
+                    activeOpacity={disabled ? 1 : 0.5}>
+                    <Text style={[styles.btnText, disabled ? styles.btnTextDisabled : null]}>-</Text>
                 </TouchableOpacity>
-                <Text style={[styles.content, props.disabled ? styles.disabled : null]}>
+                <Text style={[styles.content, disabled ? styles.disabled : null]}>
                     {this.state.value}
                 </Text>
                 <TouchableOpacity
                     style={[styles.btn, styles.btnAdd]}
-                    onPress={this.add}
-                    activeOpacity={props.disabled ? 1 : 0.5}>
-                    <Text style={[styles.btnText, props.disabled ? styles.btnTextDisabled : {}]}>+</Text>
+                    onPress={this.add.bind(this)}
+                    activeOpacity={disabled ? 1 : 0.5}>
+                    <Text style={[styles.btnText, disabled ? styles.btnTextDisabled : null]}>+</Text>
                 </TouchableOpacity>
             </View>
         )
-    },
-    getValue: function(){
+    }
+    add() {
+        this.opearte.call(this, 1)
+    }
+    sub() {
+        this.opearte.call(this, -1)
+    }
+    getValue() {
         return this.state.value
     }
-})
+    opearte(direction) {
+        this.setState(function (previousState, currentProps) {
+            if (!currentProps.disabled) {
+                let step = parseFloat(currentProps.step),
+                    value = parseFloat(previousState.value),
+                    maxStepDigit = 10,
+                    result
 
-function opearte(direction) {
-    this.setState(function (previousState, currentProps) {
-        if (!currentProps.disabled) {
-            var step = parseFloat(currentProps.step),
-                value = parseFloat(previousState.value),
-                maxStepDigit = 10,
-                result
+                // calculate
+                step = isNaN(step) ? 1 : step
+                result = parseFloat((value + step * direction).toPrecision(maxStepDigit))
 
-            // calculate
-            step = isNaN(step) ? 1 : step
-            result = parseFloat((value + step * direction).toPrecision(maxStepDigit))
+                // trigger onChange
+                this.props.onChange ? this.props.onChange(result) : null
 
-            // trigger onChange
-            this.props.onChange ? this.props.onChange(result) : null
-
-            console.log(result);
-            return {value: result}
-        }
-    })
+                return {value: result}
+            }
+        })
+    }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
